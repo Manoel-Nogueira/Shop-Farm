@@ -114,8 +114,8 @@
 				<configuration>
 					<url>jdbc:mysql://localhost:3306/shopfarm</url>
 					<user>root</user>
-					<password>univasf</password>
-					<!-- <password>123456789</password> -->
+					<password>123456789</password>
+					<!-- <password>univasf</password> -->
 				</configuration>
 			</plugin>
 		</plugins>

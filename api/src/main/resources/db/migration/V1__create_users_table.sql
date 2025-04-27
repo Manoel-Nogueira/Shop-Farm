@@ -1,0 +1,11 @@
+CREATE TABLE users(
+
+	id BIGINT AUTO_INCREMENT PRIMARY KEY,
+	name VARCHAR(255) NOT NULL,
+	email VARCHAR(255),
+	password VARCHAR(255) NOT NULL,
+	role VARCHAR(6) CHECK (role IN ('SELLER', 'BUYER')),
+	created_at TIMESTAMP,
+	updated_at TIMESTAMP
+
+);

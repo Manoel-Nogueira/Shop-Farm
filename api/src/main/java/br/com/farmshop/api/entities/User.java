@@ -1,7 +1,12 @@
 package br.com.farmshop.api.entities;
+
 import java.time.Instant;
+import java.util.Collection;
+import java.util.List;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import br.com.farmshop.api.enums.Role;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -13,7 +18,7 @@ import jakarta.persistence.Table;
 
 @Entity	
 @Table(name="users")
-public class User {
+public class User implements UserDetails {
 		
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,6 +26,7 @@ public class User {
 	private String name;
 	private String email;
 	private String password;
+	
 	@Enumerated(EnumType.STRING)
 	private Role role;
 	
@@ -96,6 +102,20 @@ public class User {
 
 	public void setUpdated_at(Instant updated_at) {
 		this.updated_at = updated_at;
+	}
+
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+
+		return List.of();
+		
+	}
+
+	@Override
+	public String getUsername() {
+
+		return this.email;
+		
 	}
 
 }

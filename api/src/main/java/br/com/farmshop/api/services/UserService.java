@@ -1,6 +1,7 @@
 package br.com.farmshop.api.services;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import br.com.farmshop.api.dtos.UserCreateDTO;
 import br.com.farmshop.api.dtos.UserResponseDTO;
@@ -18,6 +19,7 @@ public class UserService {
 	public UserResponseDTO storeUser(UserCreateDTO userCreateDTO) {
 		
 		User user = UserMapper.toEntity(userCreateDTO);
+		user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
 		
 		return UserMapper.toDTO(userRepository.save(user));
 		
@@ -32,14 +34,13 @@ public class UserService {
 	public UserResponseDTO updateUser(UserUpdateDTO userUpdateDTO) {
 		
 		User user = userRepository.findById(userUpdateDTO.id()).orElseThrow(() -> new RuntimeException("Error in UserService update"));
-		user.setId(userUpdateDTO.id());
+		
 		user.setName(userUpdateDTO.name());
 		user.setEmail(userUpdateDTO.email());
 		user.setPassword(userUpdateDTO.password());
 		user.setRole(userUpdateDTO.role());
-		userRepository.save(user);
 		
-		return UserMapper.toDTO(user);
+		return UserMapper.toDTO(userRepository.save(user));
 		
 	}
 	

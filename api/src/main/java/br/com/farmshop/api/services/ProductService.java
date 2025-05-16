@@ -33,26 +33,14 @@ public class ProductService {
 
 	public ProductResponseDTO storeProduct(ProductCreateDTO productCreateDTO) {
 		
-		
 		Product product = ProductMapper.toEntity(productCreateDTO);
-		User user = userRepository.findById(productCreateDTO.user_id()).orElseThrow(() -> new RuntimeException("Error in ProductService store 1"));
-		Category category = categoryRepository.findById(productCreateDTO.category_id()).orElseThrow(() -> new RuntimeException("Error in ProductService store 2"));
-		Brand brand = brandRepository.findById(productCreateDTO.brand_id()).orElseThrow(() -> new RuntimeException("Error in ProductService store 3"));
-		
-		/*
-				 {
-			"name": "Fertilizante Foliar Cropvit Mol Forplant - 1 Litro",
-			"description": "CROPVIT MOL é um fertilizante com formulação balanceada pronta para atender principalmente as culturas mais exigentes em Cobalto e Molibdênio. ",
-			"price": 223.12,
-			"stock": 50,
-			"user_id": 1,
-			"category_id": 0
-		} 
-		 */
+		User user = userRepository.findById(productCreateDTO.user_id()).orElseThrow(() -> new RuntimeException("Error in ProductService store"));
+		Category category = categoryRepository.findById(productCreateDTO.category_id()).orElseThrow(() -> new RuntimeException("Error in ProductService store"));
+		Brand brand = brandRepository.findById(productCreateDTO.brand_id()).orElseThrow(() -> new RuntimeException("Error in ProductService store"));
 		
 		if(category == null) {
 			
-			category = categoryRepository.findById((long) 1).orElseThrow(() -> new RuntimeException("Error in ProductService store 4"));
+			category = categoryRepository.findById((long) 1).orElseThrow(() -> new RuntimeException("Error in ProductService store"));
 			
 		}
 		
@@ -94,7 +82,7 @@ public class ProductService {
 		
 	}
 	
-	public ProductResponseDTO listProductById(Long id){
+	public ProductResponseDTO showProductById(Long id){
 		
 		Product product = productRepository.findById(id).orElseThrow(() -> new RuntimeException("Error in ProductService listById"));
 		

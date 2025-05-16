@@ -11,9 +11,9 @@ CREATE TABLE products(
 	brand_id BIGINT DEFAULT 1,
 	created_at TIMESTAMP,
 	updated_at TIMESTAMP,
-	FOREIGN KEY (user_id) REFERENCES users(id),
-	FOREIGN KEY (category_id) REFERENCES categories(id),
-	FOREIGN KEY (brand_id) REFERENCES brands(id)
+	FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+	FOREIGN KEY (category_id) REFERENCES categories(id) ON DELETE CASCADE,
+	FOREIGN KEY (brand_id) REFERENCES brands(id) ON DELETE CASCADE
 
 );
 
@@ -22,6 +22,6 @@ CREATE TABLE images(
 	id BIGINT AUTO_INCREMENT PRIMARY KEY,
 	url TEXT NOT NULL,
 	product_id BIGINT,
-	FOREIGN KEY (product_id) REFERENCES products(id)
+	FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE
 
 );

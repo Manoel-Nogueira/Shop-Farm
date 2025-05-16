@@ -6,12 +6,11 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name="cart_itens") // Nome da tabela no bd
+@Table(name="cart_items") // Nome da tabela no bd
 public class CartItem {
 	
 	@Id
@@ -24,7 +23,7 @@ public class CartItem {
 	@JoinColumn(name = "product_id")
 	private Product product;
 	
-	@ManyToMany(cascade = CascadeType.PERSIST)
+	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "cart_id")
 	private Cart cart;
 

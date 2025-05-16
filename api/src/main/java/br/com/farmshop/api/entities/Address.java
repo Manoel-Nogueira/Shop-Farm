@@ -24,7 +24,7 @@ public class Address {
 	private String complement;
 	private Long zipcode;
 	
-	@ManyToOne(cascade = CascadeType.PERSIST)
+	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name =  "user_id")
 	private User user;
 	

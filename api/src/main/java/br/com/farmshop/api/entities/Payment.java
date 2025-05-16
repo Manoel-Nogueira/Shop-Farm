@@ -8,6 +8,8 @@ import br.com.farmshop.api.enums.PaymentMethod;
 import br.com.farmshop.api.enums.PaymentStatus;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -22,11 +24,16 @@ public class Payment {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+	
+	@Enumerated(EnumType.STRING)
 	private PaymentMethod paymentMethod;
+	
 	private Float amount;
+	
+	@Enumerated(EnumType.STRING)
 	private PaymentStatus paymentStatus = PaymentStatus.INPROCESSING;
 	
-	@ManyToOne(cascade = CascadeType.PERSIST)
+	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "user_id")
 	private User user;
 	

@@ -52,9 +52,11 @@ public class CartItemController {
 	}
 	
 	@GetMapping("/{cartItem_id}")
-	public CartItemResponseDTO listCartItemById(@PathVariable("cartItem_id") Long id) {
+	public ResponseEntity<CartItemResponseDTO> listCartItemById(@PathVariable("cartItem_id") Long id) {
 		
-		return null;
+		CartItemResponseDTO cartItemResponseDTO = cartService.showCartItemById(id);
+		
+		return new ResponseEntity<>(cartItemResponseDTO, HttpStatus.OK);
 		
 	}
 	

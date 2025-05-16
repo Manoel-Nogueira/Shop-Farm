@@ -71,7 +71,7 @@ public class ReviewService {
 		
 	}
 	
-	public ReviewResponseDTO listReviewById(Long id) {
+	public ReviewResponseDTO showReviewById(Long id) {
 		
 		Review review = reviewRepository.findById(id).orElseThrow(() -> new RuntimeException("Error in ReviewService listById"));
 		

@@ -33,7 +33,6 @@ public class ProductController {
 		
 	}
 	
-	
 	@PutMapping
 	public ResponseEntity<ProductResponseDTO> updateProduct(@RequestBody ProductUpdateDTO productUpdateDTO) {
 		
@@ -43,17 +42,17 @@ public class ProductController {
 	}
 	
 	//para nomear o caminho do GetMapping(nome)
-	@GetMapping
+	@GetMapping("/list_all")
 	public List<ProductResponseDTO> listAll(){
 		
 		return productService.listAllProduct();
 		
 	}
 	
-	@GetMapping("/{product_id}")
+	@GetMapping("/show/{product_id}")
 	public ResponseEntity<ProductResponseDTO> listProductById(@PathVariable("product_id") Long id){
 		
-		ProductResponseDTO productResponseDTO = productService.listProductById(id);
+		ProductResponseDTO productResponseDTO = productService.showProductById(id);
 		return new ResponseEntity<>(productResponseDTO, HttpStatus.OK);
 		
 	}

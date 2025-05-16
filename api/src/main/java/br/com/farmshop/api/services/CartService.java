@@ -17,8 +17,10 @@ import br.com.farmshop.api.repositories.CartItemRepository;
 import br.com.farmshop.api.repositories.CartRepository;
 import br.com.farmshop.api.repositories.ProductRepository;
 import br.com.farmshop.api.repositories.UserRepository;
+import jakarta.transaction.Transactional;
 
 @Service
+@Transactional
 public class CartService {
 	
 	@Autowired
@@ -34,7 +36,7 @@ public class CartService {
 	private ProductRepository productRepository;
 	
 	private Cart createCart(User user) {
-		
+	
 		Cart cart = new Cart();
 		cart.setUser(user);
 		
@@ -52,27 +54,36 @@ public class CartService {
 		
 		User user = userRepository.findById(cartItemCreateDTO.user_id()).orElseThrow(() -> new RuntimeException("Error in CartService create"));
 		Product product = productRepository.findById(cartItemCreateDTO.product_id()).orElseThrow(() -> new RuntimeException("Error in CartService create"));
-		Cart cart = cartRepository.findByUser(user).orElseGet(() -> createCart(user));
 		
+		Cart cart = cartRepository.findByUser(user).orElseGet(() -> createCart(user));
 		CartItem cartItem = cartItemRepository.findByProduct(product); 
 		
-		if(cartItem == null) {
-			
-			// Caso o item não exista no carrinho
-			cartItem = CartItemMapper.toEntity(cartItemCreateDTO);
-			
-			cartItem.setSubtotal(product.getPrice() * (float) cartItem.getQuantity());
-			cartItem.setProduct(product);
-			cartItem.setCart(cart);
-			
-			return CartItemMapper.toDTO(cartItemRepository.save(cartItem));
+		// Verificando se a quantidade do product é maior que 0 e se tem stock do product 
+		if(cartItemCreateDTO.quantity() > 0 && cartItemCreateDTO.quantity() <= product.getStock()) {
 		
+			if(cartItem == null) {
+				
+				// Caso o item não exista no carrinho
+				cartItem = CartItemMapper.toEntity(cartItemCreateDTO);
+				
+				cartItem.setSubtotal(product.getPrice() * (float) cartItem.getQuantity());
+				cartItem.setProduct(product);
+				cartItem.setCart(cart);
+				
+				return CartItemMapper.toDTO(cartItemRepository.save(cartItem));
+			
+			}else {
+				
+				// Caso o item já exista no carrinho, como ele já existe eu só somar a quantidade com a existente do item
+				CartItemUpdateDTO cartItemUpdateDTO = new CartItemUpdateDTO(cartItem.getId(), cartItem.getQuantity() + cartItemCreateDTO.quantity());
+				
+				return updateCartItem(cartItemUpdateDTO);
+				
+			}
+			
 		}else {
 			
-			// Caso o item já exista no carrinho, como ele já existe eu só somo a quantidade com a existente do item
-			CartItemUpdateDTO cartItemUpdateDTO = new CartItemUpdateDTO(cartItem.getId(), cartItem.getQuantity() + cartItemCreateDTO.quantity());
-			
-			return updateCartItem(cartItemUpdateDTO);
+			return null;
 			
 		}
 		
@@ -105,7 +116,7 @@ public class CartService {
 		
 	}
 	
-	public CartItemResponseDTO listCartItemById(Long id) {
+	public CartItemResponseDTO showCartItemById(Long id) {
 		
 		CartItem cartItem = cartItemRepository.findById(id).orElseThrow(() -> new RuntimeException("Error in CartService listById"));
 		
@@ -120,6 +131,12 @@ public class CartService {
 		
 		return true;
 		
+	}
+	
+	public Float getTotalPrice(Long id) {
+		
+		return cartRepository.getTotalPrice(id);
+
 	}
 	
 }

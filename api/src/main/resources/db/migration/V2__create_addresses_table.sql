@@ -9,6 +9,6 @@ CREATE TABLE addresses(
 	complement VARCHAR(255),
 	zipcode BIGINT,
 	user_id BIGINT,
-	FOREIGN KEY (user_id) REFERENCES users(id)
+	FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 
 );

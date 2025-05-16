@@ -25,7 +25,7 @@ public class ImageService {
 	public ImageResponseDTO storeImage(ImageCreateDTO imageCreateDTO) {
 		
 		Image image = ImageMapper.toEntity(imageCreateDTO);
-		Product product = productRepository.findById(imageCreateDTO.product_id()).orElseThrow(() -> new RuntimeException("Error in ProductService store"));
+		Product product = productRepository.findById(imageCreateDTO.product_id()).orElseThrow(() -> new RuntimeException("Error in ImageService store"));
 		
 		image.setProduct(product);
 
@@ -35,8 +35,8 @@ public class ImageService {
 	
 	public ImageResponseDTO updateImage(ImageUpdateDTO imageUpdateDTO){
 		
-		Image image = imageRepository.findById(imageUpdateDTO.id()).orElseThrow(() -> new RuntimeException("Error in ProductService update"));
-		Product product = productRepository.findById(imageUpdateDTO.product_id()).orElseThrow(() -> new RuntimeException("Error in ProductService update"));
+		Image image = imageRepository.findById(imageUpdateDTO.id()).orElseThrow(() -> new RuntimeException("Error in ImageService update"));
+		Product product = productRepository.findById(imageUpdateDTO.product_id()).orElseThrow(() -> new RuntimeException("Error in ImageService update"));
 		
 		image.setUrl(imageUpdateDTO.url());
 		image.setProduct(product);
@@ -53,7 +53,7 @@ public class ImageService {
 	
 	public ImageResponseDTO listImageById(Long id){
 		
-		Image image = imageRepository.findById(id).orElseThrow(() -> new RuntimeException("Error in ProductService list by id"));
+		Image image = imageRepository.findById(id).orElseThrow(() -> new RuntimeException("Error in ImageService list by id"));
 		
 		return ImageMapper.toDTO(image);
 		
@@ -61,7 +61,7 @@ public class ImageService {
 	
 	public Boolean destroyImage(Long id) {
 		
-		imageRepository.delete(imageRepository.findById(id).orElseThrow(() -> new RuntimeException("Error in ProductService delete")));
+		imageRepository.delete(imageRepository.findById(id).orElseThrow(() -> new RuntimeException("Error in ImageService delete")));
 		
 		return true;
 			

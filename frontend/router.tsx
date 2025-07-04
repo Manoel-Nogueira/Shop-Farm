@@ -10,6 +10,7 @@ export function Router () {
             <Route path="/login" element={<Pages.Login/>}/>
             <Route path="/register" element={<Pages.Register/>}/>
             <Route path="/product/:id" element={<Pages.Product/>}/>
+            <Route path="/payment" element={<Pages.Payment/>}/>
             <Route path="/shopping" element={<Pages.Shopping/>}/>
             <Route path="/*" element={<Pages.Page404/>}/>
         </Routes>

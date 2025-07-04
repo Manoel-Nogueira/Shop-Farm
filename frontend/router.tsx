@@ -6,7 +6,7 @@ export function Router () {
     return (
 
         <Routes>
-
+            <Route path="/register" element={<Pages.Register/>}/>
         </Routes>
 
     )

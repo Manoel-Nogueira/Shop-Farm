@@ -1,6 +1,5 @@
 package br.com.farmshop.api.entities;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -18,7 +17,7 @@ public class Image {
 	private Long id;
 	private String url;
 	
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne
 	@JoinColumn(name =  "product_id")
 	private Product product;
 

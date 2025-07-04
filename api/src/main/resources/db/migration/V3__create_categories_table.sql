@@ -4,6 +4,3 @@ CREATE TABLE categories(
 	name VARCHAR(255)
 
 );
-
-INSERT INTO categories(name) VALUES
-	("None");

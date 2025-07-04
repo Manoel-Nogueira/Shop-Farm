@@ -28,7 +28,11 @@ public class SecurityConfig {
 		"/api/users/register",
 		"/api/users/auth",
 		"/api/products/list_all",
-		"/api/products/show/**",
+		"/api/categories/list_all",
+		"/api/reviews/list_all/*",
+		"/api/products/show/*",
+		"/api/images/list_all/*",
+		"/api/images/list_all"
 		
 	};
 	

@@ -1,5 +1,6 @@
 package br.com.farmshop.api.controllers;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,16 +16,21 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.farmshop.api.dtos.CartItemCreateDTO;
+import br.com.farmshop.api.dtos.CartItemImageResponseDTO;
 import br.com.farmshop.api.dtos.CartItemResponseDTO;
 import br.com.farmshop.api.dtos.CartItemUpdateDTO;
 import br.com.farmshop.api.services.CartService;
+import br.com.farmshop.api.services.ImageService;
 
 @RestController
-@RequestMapping("/api/cartitems")
+@RequestMapping("/api/cart_items")
 public class CartItemController {
 	
 	@Autowired
 	CartService cartService;
+	
+	@Autowired
+	ImageService imageService;
 	
 	@PostMapping
 	public ResponseEntity<CartItemResponseDTO>  createCartItem(@RequestBody CartItemCreateDTO cartItemCreateDTO) {
@@ -35,7 +41,7 @@ public class CartItemController {
 		
 	}
 	
-	@PutMapping
+	@PutMapping("/update")
 	public ResponseEntity<CartItemResponseDTO> updateCartItem(@RequestBody CartItemUpdateDTO cartItemUpdateDTO) {
 		
 		CartItemResponseDTO cartItemResponseDTO = cartService.updateCartItem(cartItemUpdateDTO);
@@ -44,33 +50,75 @@ public class CartItemController {
 		
 	}
 	
-	@GetMapping("/all/{cart_id}")
-	public List<CartItemResponseDTO> listAllCartItem(@PathVariable("cart_id") Long id) {
+	@GetMapping("/list_all/{user_id}")
+	public List<CartItemImageResponseDTO> listAllCartItem(@PathVariable("user_id") Long id) {
 		
-		return cartService.listAllCartItem(id);
+		try {
+			
+			List<CartItemResponseDTO> cartItem = cartService.listAllCartItem(id);
+			List<CartItemImageResponseDTO> cartItemImage = new ArrayList<>();
+			
+			for(CartItemResponseDTO cartItemResponseDTO : cartItem) {
+				
+				CartItemImageResponseDTO cartItemImageResponseDTO = new CartItemImageResponseDTO(cartItemResponseDTO, imageService.listAllImagesProduct(cartItemResponseDTO.product().id()));
+				
+				cartItemImage.add(cartItemImageResponseDTO);
+				
+			}
+			
+			return cartItemImage;
+			
+		}catch (Exception e) {
+			
+			return null;
+			
+		}
 		
 	}
 	
-	@GetMapping("/{cartItem_id}")
-	public ResponseEntity<CartItemResponseDTO> listCartItemById(@PathVariable("cartItem_id") Long id) {
+	@GetMapping("/show/{cartItem_id}")
+	public ResponseEntity<CartItemImageResponseDTO> listCartItemById(@PathVariable("cartItem_id") Long id) {
 		
 		CartItemResponseDTO cartItemResponseDTO = cartService.showCartItemById(id);
+		CartItemImageResponseDTO cartItemImageResponseDTO = new CartItemImageResponseDTO(cartItemResponseDTO, imageService.listAllImagesProduct(cartItemResponseDTO.product().id()));
 		
-		return new ResponseEntity<>(cartItemResponseDTO, HttpStatus.OK);
+		return new ResponseEntity<>(cartItemImageResponseDTO, HttpStatus.OK);
 		
 	}
 	
-	@DeleteMapping("/all/{cart_id}")
+	@DeleteMapping("delete/all/{cart_id}")
 	public void clearCart(@PathVariable("cart_id") Long id) {
 		
 		cartService.clearCart(id);
 		
 	} 
 	
-	@DeleteMapping("/{cartItem_id}")
+	@DeleteMapping("delete/{cartItem_id}")
 	public Boolean destroyCartItem(@PathVariable("cartItem_id") Long id) {
 		
 		return cartService.destroyCartItem(id);
+		
+	}
+	
+	@GetMapping("/total_price/{cart_id}")
+	public Float getTotalPrice(@PathVariable("cart_id") Long id) {
+		
+		return cartService.getTotalPrice(id);
+		
+	}
+	
+	@GetMapping("/quantity/{user_id}")
+	public Long getQuantityItems(@PathVariable("user_id") Long id) {
+		
+		try {
+			
+			return cartService.getQuantityItems(id);
+			
+		} catch (Exception e) {
+			
+			return (long) 0;
+			
+		}
 		
 	}
 

@@ -43,8 +43,15 @@ public class ImageController {
 	}
 	
 	//para nomear o caminho do GetMapping(nome)
-	@GetMapping("/all/{product_id}")
-	public List<ImageResponseDTO> listAllImage(@PathVariable("product_id") Long id){
+	@GetMapping("/list_all/{product_id}")
+	public List<ImageResponseDTO> listAllImagesProduct(@PathVariable("product_id") Long id){
+		
+		return imageService.listAllImagesProduct(id);
+		
+	}
+	
+	@GetMapping("/list_all")
+	public List<ImageResponseDTO> listAllImages(@PathVariable("product_id") Long id){
 		
 		return imageService.listAllImage(id);
 		

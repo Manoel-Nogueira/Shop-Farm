@@ -8,7 +8,7 @@ public class ProductMapper {
 	
 	public static ProductResponseDTO toDTO(Product product){
 		
-		return new ProductResponseDTO(product.getId(), product.getName(), product.getDescription(), product.getPrice(), product.getRating(), product.getStock(), product.getCreated_at(), product.getUpdated_at(), UserMapper.toDTO(product.getUser()), CategoryMapper.toDTO(product.getCategory()), BrandMapper.toDTO(product.getBrand()));
+		return new ProductResponseDTO(product.getId(), product.getName(), product.getDescription(), product.getPrice(), product.getRating(), product.getStock(), product.getCreated_at(), product.getUpdated_at(), CategoryMapper.toDTO(product.getCategory()), BrandMapper.toDTO(product.getBrand()));
 		
 	}
 	

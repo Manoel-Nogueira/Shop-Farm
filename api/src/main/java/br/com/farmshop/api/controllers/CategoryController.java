@@ -43,7 +43,7 @@ public class CategoryController {
 	}
 	
 	//para nomear o caminho do GetMapping(nome)
-	@GetMapping
+	@GetMapping("/list_all")
 	public List<CategoryResponseOrUpdateDTO> listAllCategory(){
 		
 		return categoryService.listAllCategory();

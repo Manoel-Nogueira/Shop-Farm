@@ -44,7 +44,7 @@ public class ReviewController {
 		
 	}
 	
-	@GetMapping("/all/{product_id}")
+	@GetMapping("/list_all/{product_id}")
 	public List<ReviewResponseDTO> listAllReview(@PathVariable("product_id") Long id) {
 		
 		return reviewService.listAllReview(id);

@@ -3,7 +3,6 @@ package br.com.farmshop.api.entities;
 import java.time.Instant;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -25,15 +24,11 @@ public class Product {
 	private Float rating;
 	private Long stock;
 	
-	@ManyToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "user_id")
-	private User user;
-	
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne
 	@JoinColumn(name = "category_id")
 	private Category category;
 	
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne
 	@JoinColumn(name = "brand_id")
 	private Brand brand;
 	
@@ -52,7 +47,6 @@ public class Product {
 		this.price = price;
 		this.rating = rating;
 		this.stock = stock;
-		this.user = user;
 		this.category = category;
 		this.brand = brand;
 		this.created_at = created_at;
@@ -105,14 +99,6 @@ public class Product {
 
 	public void setStock(Long stock) {
 		this.stock = stock;
-	}
-
-	public User getUser() {
-		return user;
-	}
-
-	public void setUser(User user) {
-		this.user = user;
 	}
 
 	public Category getCategory() {

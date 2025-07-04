@@ -112,13 +112,16 @@ public class CartService {
 	
 	public List<CartItemResponseDTO> listAllCartItem(Long id) {
 		
-		return cartItemRepository.findByCartId(id).stream().map(CartItemMapper::toDTO).toList();
+		User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("Error in CartService listAllCartItem"));
+		Cart cart = cartRepository.findByUser(user).orElseThrow(() -> new RuntimeException("Error in CartService listAllCartItem")); 
+		
+		return cartItemRepository.findByCartId(cart.getId()).stream().map(CartItemMapper::toDTO).toList();
 		
 	}
 	
 	public CartItemResponseDTO showCartItemById(Long id) {
 		
-		CartItem cartItem = cartItemRepository.findById(id).orElseThrow(() -> new RuntimeException("Error in CartService listById"));
+		CartItem cartItem = cartItemRepository.findById(id).orElseThrow(() -> new RuntimeException("Error in CartService showCartItemById"));
 		
 		return CartItemMapper.toDTO(cartItem);
 		
@@ -126,7 +129,7 @@ public class CartService {
 
 	public Boolean destroyCartItem(Long id) {
 		
-		CartItem cartItem = cartItemRepository.findById(id).orElseThrow(() -> new RuntimeException("Error in CartService destroy"));
+		CartItem cartItem = cartItemRepository.findById(id).orElseThrow(() -> new RuntimeException("Error in CartService destroyCartItem"));
 		cartItemRepository.delete(cartItem);
 		
 		return true;
@@ -137,6 +140,17 @@ public class CartService {
 		
 		return cartRepository.getTotalPrice(id);
 
+	}
+	
+	public Long getQuantityItems(Long id) {
+		
+		User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("Error in CartService getQuantityItems"));
+		Cart cart = cartRepository.findByUser(user).orElseThrow(() -> new RuntimeException("Error in CartService getQuantityItems"));
+		
+		List<CartItemResponseDTO> cartItemResponseDTO = cartItemRepository.findByCartId(cart.getId()).stream().map(CartItemMapper::toDTO).toList();
+		
+		return (long) cartItemResponseDTO.size();
+		
 	}
 	
 }

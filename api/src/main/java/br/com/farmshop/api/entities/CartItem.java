@@ -1,6 +1,5 @@
 package br.com.farmshop.api.entities;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -23,7 +22,7 @@ public class CartItem {
 	@JoinColumn(name = "product_id")
 	private Product product;
 	
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne
 	@JoinColumn(name = "cart_id")
 	private Cart cart;
 

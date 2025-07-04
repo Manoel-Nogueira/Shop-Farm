@@ -1,6 +1,5 @@
 package br.com.farmshop.api.entities;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -24,7 +23,7 @@ public class Address {
 	private String complement;
 	private Long zipcode;
 	
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne
 	@JoinColumn(name =  "user_id")
 	private User user;
 	

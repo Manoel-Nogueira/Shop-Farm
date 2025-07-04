@@ -31,6 +31,7 @@ import br.com.farmshop.api.repositories.UserRepository;
 import jakarta.transaction.Transactional;
 
 @Service
+@Transactional
 public class OrderService {
 	
 	@Autowired
@@ -86,7 +87,7 @@ public class OrderService {
 			orderItemRepository.save(orderItem);
 			
 			// Atualizando o stock do product
-			ProductUpdateDTO productUpdateDTO = new ProductUpdateDTO(product.getId(), product.getName(), product.getDescription(), product.getPrice(), product.getStock() - cartItem.getQuantity(), product.getUser().getId(), product.getCategory().getId(), product.getBrand().getId());
+			ProductUpdateDTO productUpdateDTO = new ProductUpdateDTO(product.getId(), product.getName(), product.getDescription(), product.getPrice(), product.getStock() - cartItem.getQuantity(), product.getCategory().getId(), product.getBrand().getId());
 			productService.updateProduct(productUpdateDTO);
 			
 		}
@@ -119,7 +120,7 @@ public class OrderService {
 	
 	public List<OrderResponseDTO> listAllOrder(Long id) {
 		
-		return orderRepository.findAll().stream().map(OrderMapper::toDTO).toList();
+		return orderRepository.findByUserId(id).stream().map(OrderMapper::toDTO).toList();
 		
 	}
 	

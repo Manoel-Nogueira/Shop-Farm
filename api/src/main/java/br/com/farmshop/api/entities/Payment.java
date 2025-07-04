@@ -6,7 +6,6 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import br.com.farmshop.api.enums.PaymentMethod;
 import br.com.farmshop.api.enums.PaymentStatus;
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -31,9 +30,9 @@ public class Payment {
 	private Float amount;
 	
 	@Enumerated(EnumType.STRING)
-	private PaymentStatus paymentStatus = PaymentStatus.INPROCESSING;
+	private PaymentStatus paymentStatus = PaymentStatus.FINALIZED;
 	
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne
 	@JoinColumn(name = "user_id")
 	private User user;
 	

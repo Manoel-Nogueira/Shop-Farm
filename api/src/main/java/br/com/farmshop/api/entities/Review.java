@@ -1,10 +1,7 @@
 package br.com.farmshop.api.entities;
 
 import java.time.Instant;
-
 import org.hibernate.annotations.CreationTimestamp;
-
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -23,11 +20,11 @@ public class Review {
 	private Long rating;
 	private String comment;
 	
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne
 	@JoinColumn(name = "user_id")
 	private User user;
 	
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne
 	@JoinColumn(name = "product_id")
 	private Product product;
 	

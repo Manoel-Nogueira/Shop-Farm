@@ -1,5 +1,6 @@
 package br.com.farmshop.api.controllers;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,10 +16,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.farmshop.api.dtos.OrderCreateDTO;
+import br.com.farmshop.api.dtos.OrderImagesItemsResponseDTO;
+import br.com.farmshop.api.dtos.OrderItemImageResponseDTO;
 import br.com.farmshop.api.dtos.OrderItemResponseDTO;
 import br.com.farmshop.api.dtos.OrderResponseDTO;
 import br.com.farmshop.api.dtos.OrderStatusUpdateDTO;
 import br.com.farmshop.api.dtos.OrderTrackingCodeUpdateDTO;
+import br.com.farmshop.api.services.ImageService;
 import br.com.farmshop.api.services.OrderService;
 
 @RestController
@@ -27,6 +31,9 @@ public class OrderController {
 	
 	@Autowired
 	OrderService orderService;
+	
+	@Autowired
+	ImageService imageService;
 	
 	@PostMapping
 	public ResponseEntity<OrderResponseDTO> createOrder(@RequestBody OrderCreateDTO orderCreateDTO){
@@ -55,17 +62,65 @@ public class OrderController {
 		
 	}
 	
-	@GetMapping("/all/{user_id}")
-	public List<OrderResponseDTO> listAllOrder(@PathVariable("user_id") Long id){
+	@GetMapping("/list_all/{user_id}")
+	public List<OrderImagesItemsResponseDTO> listAllOrder(@PathVariable("user_id") Long id){
 		
-		return orderService.listAllOrder(id);
+		try {
+		
+			List<OrderResponseDTO> orders = orderService.listAllOrder(id);
+			List<OrderImagesItemsResponseDTO> orderImagesItems = new ArrayList<>();
+			
+			for(OrderResponseDTO orderResponseDTO : orders) {
+				
+				List<OrderItemResponseDTO> ordersItems = orderService.listAllOrderItem(orderResponseDTO.id());
+				List<OrderItemImageResponseDTO> orderItemImage = new ArrayList<>();
+				
+				for(OrderItemResponseDTO orderItemResponseDTO : ordersItems) {
+					
+					OrderItemImageResponseDTO orderItemImageResponseDTO = new OrderItemImageResponseDTO(orderItemResponseDTO, imageService.listAllImagesProduct(orderItemResponseDTO.product().id()));
+					
+					orderItemImage.add(orderItemImageResponseDTO);
+					
+				}
+				
+				OrderImagesItemsResponseDTO orderImagesItemsResponseDTO = new OrderImagesItemsResponseDTO(orderResponseDTO, orderItemImage);
+				orderImagesItems.add(orderImagesItemsResponseDTO);
+				
+			}
+			
+			return orderImagesItems;
+			
+		}catch (Exception e) {
+			
+			return null;
+			
+		}
 		
 	}
 	
-	@GetMapping("/all/items/{order_id}")
-	public List<OrderItemResponseDTO> listAllOrderItem(@PathVariable("order_id") Long id) {
+	@GetMapping("/list_all/items/{order_id}")
+	public List<OrderItemImageResponseDTO> listAllOrderItem(@PathVariable("order_id") Long id) {
 		
-		return orderService.listAllOrderItem(id);
+		try {
+			
+			List<OrderItemResponseDTO> orderItem = orderService.listAllOrderItem(id);
+			List<OrderItemImageResponseDTO> orderItemImage = new ArrayList<>();
+			
+			for(OrderItemResponseDTO orderItemResponseDTO : orderItem) {
+				
+				OrderItemImageResponseDTO orderItemImageResponseDTO = new OrderItemImageResponseDTO(orderItemResponseDTO, imageService.listAllImagesProduct(orderItemResponseDTO.product().id()));
+				
+				orderItemImage.add(orderItemImageResponseDTO);
+				
+			}
+			
+			return orderItemImage;
+			
+		}catch (Exception e) {
+			
+			return null;
+			
+		}
 		
 	}
 	
@@ -79,11 +134,12 @@ public class OrderController {
 	}
 	
 	@GetMapping("/items/{orderItem_id}")
-	public ResponseEntity<OrderItemResponseDTO> listOrderItemById(@PathVariable("orderItem_id") Long id) {
+	public ResponseEntity<OrderItemImageResponseDTO> listOrderItemById(@PathVariable("orderItem_id") Long id) {
 		
 		OrderItemResponseDTO orderItemResponseDTO = orderService.showOrderItemById(id);
+		OrderItemImageResponseDTO orderItemImageResponseDTO = new OrderItemImageResponseDTO(orderItemResponseDTO, imageService.listAllImagesProduct(orderItemResponseDTO.product().id()));
 		
-		return new ResponseEntity<>(orderItemResponseDTO, HttpStatus.OK);
+		return new ResponseEntity<>(orderItemImageResponseDTO, HttpStatus.OK);
 		
 	}
 	

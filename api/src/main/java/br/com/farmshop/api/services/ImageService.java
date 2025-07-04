@@ -45,9 +45,15 @@ public class ImageService {
 		
 	}
 	
-	public List<ImageResponseDTO> listAllImage(Long id){
+	public List<ImageResponseDTO> listAllImagesProduct(Long id){
 		
 		return imageRepository.findByProductId(id).stream().map(ImageMapper::toDTO).toList();
+		
+	}
+	
+	public List<ImageResponseDTO> listAllImage(Long id){
+		
+		return imageRepository.findAll().stream().map(ImageMapper::toDTO).toList();
 		
 	}
 	

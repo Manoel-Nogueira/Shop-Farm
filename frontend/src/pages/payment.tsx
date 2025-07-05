@@ -7,7 +7,7 @@ import { useLocation } from 'react-router-dom';
 export function Payment () {
 
     // Enter the mercado pago API public key here
-    initMercadoPago("Enter the mercado pago API public key here", {locale: "pt-BR"})
+    initMercadoPago("ENTER_THE_MERCADO_PAGO_API_PUBLIC_KEY_HERE", {locale: "pt-BR"})
 
     const location = useLocation()
     const {props} = location.state
